@@ -1,6 +1,6 @@
 
 import { NextResponse } from "next/server";
-import { connectDB } from "@/lib/mongodb";
+import connectDB from "@/lib/mongodb";
 import { contactSchema } from "@/lib/validations/contact";
 import Contact from "@/models/Contact";
 
