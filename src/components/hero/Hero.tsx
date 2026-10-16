@@ -1,7 +1,6 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -38,30 +37,22 @@ const technologies = [
 
 const technologyTags = ["AI", "Cloud", "Data", "Software", "Automation"];
 
+const entranceVariants = {
+  hidden: { opacity: 0, y: 14 },
+  visible: { opacity: 1, y: 0 },
+};
+
 export default function Hero() {
   const shouldReduceMotion = useReducedMotion();
-  const [isMobile, setIsMobile] = useState(false);
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 639px)");
-
-    const updateMobile = () => {
-      setIsMobile(mediaQuery.matches);
-    };
-
-    updateMobile();
-    mediaQuery.addEventListener("change", updateMobile);
-
-    return () => {
-      mediaQuery.removeEventListener("change", updateMobile);
-    };
-  }, []);
-
-  const disableAnimation = Boolean(shouldReduceMotion) || isMobile;
-
-  const entranceClass = disableAnimation
-    ? "opacity-100"
-    : "hero-entrance";
+  const entranceTransition = (delay = 0) =>
+    shouldReduceMotion
+      ? { duration: 0 }
+      : {
+          duration: 0.48,
+          delay,
+          ease: "easeOut" as const,
+        };
 
   return (
     <section
@@ -71,27 +62,27 @@ export default function Hero() {
       {/* Background grid */}
       <div
         aria-hidden="true"
-        className="grid-background pointer-events-none absolute inset-0 opacity-50"
+        className="grid-background pointer-events-none absolute inset-0 opacity-40"
       />
 
-      {/* Ambient lighting */}
+      {/* Lightweight ambient lighting */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-[35%] h-[180px] w-[180px] -translate-x-1/2 rounded-full bg-blue-600/[0.08] blur-[45px] sm:h-[400px] sm:w-[400px] sm:blur-[80px] lg:h-[500px] lg:w-[500px] lg:blur-[100px]"
-      />
-
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute left-[5%] top-[20%] h-[120px] w-[120px] rounded-full bg-cyan-500/[0.04] blur-[40px] sm:h-[200px] sm:w-[200px] sm:blur-[70px]"
+        className="pointer-events-none absolute left-1/2 top-[35%] h-40 w-40 -translate-x-1/2 rounded-full bg-blue-600/[0.08] blur-[40px] sm:h-80 sm:w-80 sm:blur-[65px] lg:h-[500px] lg:w-[500px] lg:blur-[100px]"
       />
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-[10%] right-[5%] h-[150px] w-[150px] rounded-full bg-purple-600/[0.04] blur-[45px] sm:h-[250px] sm:w-[250px] sm:blur-[80px]"
+        className="pointer-events-none absolute left-[5%] top-[20%] hidden h-40 w-40 rounded-full bg-cyan-500/[0.04] blur-[60px] sm:block"
       />
 
-      {/* Floating technology cards: desktop only */}
-      {!disableAnimation &&
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-[10%] right-[5%] hidden h-48 w-48 rounded-full bg-purple-600/[0.04] blur-[65px] sm:block"
+      />
+
+      {/* Desktop-only floating technology cards */}
+      {!shouldReduceMotion &&
         technologies.map((item, index) => {
           const Icon = item.icon;
 
@@ -100,10 +91,10 @@ export default function Hero() {
               key={item.label}
               aria-hidden="true"
               className={`pointer-events-none absolute hidden lg:block ${item.position}`}
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 8 }}
               animate={{
                 opacity: 1,
-                y: [0, -6, 0],
+                y: [0, -4, 0],
               }}
               transition={{
                 opacity: {
@@ -111,7 +102,7 @@ export default function Hero() {
                   delay: index * 0.08,
                 },
                 y: {
-                  duration: 5 + index,
+                  duration: 6 + index,
                   repeat: Infinity,
                   ease: "easeInOut",
                 },
@@ -134,71 +125,67 @@ export default function Hero() {
       <div className="container-custom relative z-10 flex min-h-[min(680px,calc(100svh-10rem))] items-center justify-center">
         <div className="mx-auto w-full max-w-5xl text-center">
           {/* Eyebrow */}
-          <div
-            className={`${entranceClass} mb-7 inline-flex max-w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-slate-900/70 px-3 py-2 sm:mb-8 sm:px-4`}
-            style={
-              disableAnimation
-                ? undefined
-                : { animationDelay: "0ms" }
-            }
+          <motion.div
+            variants={entranceVariants}
+            initial="hidden"
+            animate="visible"
+            transition={entranceTransition(0)}
+            className="mb-7 inline-flex max-w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-slate-900/70 px-3 py-2 sm:mb-8 sm:px-4"
           >
             <span
               aria-hidden="true"
               className="relative flex h-2 w-2 shrink-0"
             >
-              <span className="absolute hidden h-full w-full rounded-full bg-cyan-400 opacity-50 motion-reduce:animate-none sm:inline-flex sm:animate-ping" />
+              <span className="absolute hidden h-full w-full rounded-full bg-cyan-400 opacity-50 motion-safe:sm:inline-flex motion-safe:sm:animate-ping" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-400" />
             </span>
 
             <span className="text-xs font-medium leading-5 tracking-wide text-slate-300 sm:text-sm">
               Building the future with intelligent technology
             </span>
-          </div>
+          </motion.div>
 
           {/* Main heading */}
-          <h1
+          <motion.h1
             id="hero-heading"
-            className={`${entranceClass} mx-auto max-w-4xl text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl sm:leading-[1.08] md:text-7xl lg:text-8xl`}
-            style={
-              disableAnimation
-                ? undefined
-                : { animationDelay: "80ms" }
-            }
+            variants={entranceVariants}
+            initial="hidden"
+            animate="visible"
+            transition={entranceTransition(0.08)}
+            className="mx-auto max-w-4xl text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl sm:leading-[1.08] md:text-7xl lg:text-8xl"
           >
             Technology that
             <br className="hidden sm:block" />{" "}
             <span className="gradient-text">
               moves business forward.
             </span>
-          </h1>
+          </motion.h1>
 
           {/* Description */}
-          <p
-            className={`${entranceClass} mx-auto mt-6 max-w-2xl text-base leading-7 text-slate-300 sm:mt-7 sm:text-lg sm:leading-8`}
-            style={
-              disableAnimation
-                ? undefined
-                : { animationDelay: "160ms" }
-            }
+          <motion.p
+            variants={entranceVariants}
+            initial="hidden"
+            animate="visible"
+            transition={entranceTransition(0.16)}
+            className="mx-auto mt-6 max-w-2xl text-base leading-7 text-slate-300 sm:mt-7 sm:text-lg sm:leading-8"
           >
             CloudMind Solutions builds intelligent software,
             AI-powered solutions, cloud platforms, and modern
             digital experiences that help businesses grow faster
             and operate smarter.
-          </p>
+          </motion.p>
 
           {/* Calls to action */}
-          <div
-            className={`${entranceClass} mt-8 flex w-full flex-col items-stretch justify-center gap-3 sm:mt-9 sm:w-auto sm:flex-row sm:items-center sm:gap-4`}
-            style={
-              disableAnimation
-                ? undefined
-                : { animationDelay: "240ms" }
-            }
+          <motion.div
+            variants={entranceVariants}
+            initial="hidden"
+            animate="visible"
+            transition={entranceTransition(0.24)}
+            className="mt-8 flex w-full flex-col items-stretch justify-center gap-3 sm:mt-9 sm:w-auto sm:flex-row sm:items-center sm:gap-4"
           >
             <Link
               href="#contact"
-              className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold text-slate-950 transition-colors duration-200 hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050816] sm:w-auto motion-reduce:transition-none"
+              className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold text-slate-950 transition-colors duration-200 hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050816] motion-reduce:transition-none sm:w-auto"
             >
               Start a Project
 
@@ -211,7 +198,7 @@ export default function Hero() {
 
             <Link
               href="#services"
-              className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.04] px-6 py-3.5 text-sm font-semibold text-white transition-colors duration-200 hover:border-white/25 hover:bg-white/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050816] sm:w-auto motion-reduce:transition-none"
+              className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.04] px-6 py-3.5 text-sm font-semibold text-white transition-colors duration-200 hover:border-white/25 hover:bg-white/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050816] motion-reduce:transition-none sm:w-auto"
             >
               Explore Services
 
@@ -221,17 +208,16 @@ export default function Hero() {
                 className="transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transition-none"
               />
             </Link>
-          </div>
+          </motion.div>
 
           {/* Technology indicators */}
-          <div
+          <motion.div
             aria-label="Our technology areas"
-            className={`${entranceClass} mt-10 flex flex-wrap items-center justify-center gap-2 sm:mt-12 sm:gap-3`}
-            style={
-              disableAnimation
-                ? undefined
-                : { animationDelay: "320ms" }
-            }
+            variants={entranceVariants}
+            initial="hidden"
+            animate="visible"
+            transition={entranceTransition(0.32)}
+            className="mt-10 flex flex-wrap items-center justify-center gap-2 sm:mt-12 sm:gap-3"
           >
             {technologyTags.map((technology) => (
               <span
@@ -241,7 +227,7 @@ export default function Hero() {
                 {technology}
               </span>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
 

@@ -1,7 +1,8 @@
 
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import Link from "next/link";
 import {
   ArrowUpRight,
   Mail,
@@ -10,7 +11,7 @@ import {
   Send,
   Sparkles,
 } from "lucide-react";
-import { useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { useForm } from "react-hook-form";
 
 type ContactFormData = {
@@ -21,7 +22,50 @@ type ContactFormData = {
   message: string;
 };
 
+const contactServices = [
+  { value: "ai", label: "AI & Machine Learning" },
+  { value: "software", label: "Software Development" },
+  { value: "web", label: "Web & App Development" },
+  { value: "cloud", label: "Cloud Solutions" },
+  { value: "data", label: "Data & Analytics" },
+  { value: "automation", label: "Automation" },
+  { value: "other", label: "Something else" },
+];
+
+const contactItems = [
+  {
+    icon: Mail,
+    label: "Email",
+    value: "hello@cloudmindsolutions.com",
+    href: "mailto:hello@cloudmindsolutions.com",
+    color: "blue",
+  },
+  {
+    icon: Phone,
+    label: "Phone",
+    value: "+91 XXXXX XXXXX",
+    color: "cyan",
+  },
+  {
+    icon: MapPin,
+    label: "Location",
+    value: "India",
+    color: "purple",
+  },
+] as const;
+
+const inputClass =
+  "w-full min-w-0 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3.5 text-white outline-none transition-colors duration-200 placeholder:text-slate-600 focus:border-blue-400/60 focus:bg-white/[0.05]";
+
+const errorClass = "mt-2 text-sm leading-5 text-red-400";
+
+const entranceTransition = {
+  duration: 0.45,
+  ease: "easeOut" as const,
+};
+
 export default function Contact() {
+  const shouldReduceMotion = useReducedMotion();
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
@@ -54,11 +98,11 @@ export default function Contact() {
         body: JSON.stringify(data),
       });
 
-      const result = await response.json();
+      const result = await response.json().catch(() => null);
 
-      if (!response.ok || !result.success) {
+      if (!response.ok || !result?.success) {
         setSubmitError(
-          result.message ||
+          result?.message ||
             "Unable to submit your enquiry. Please try again."
         );
         return;
@@ -73,35 +117,53 @@ export default function Contact() {
     }
   };
 
-  const inputClass =
-    "w-full rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3.5 text-white outline-none transition placeholder:text-slate-600 focus:border-blue-400/50 focus:bg-white/[0.05]";
+  const motionProps = (delay = 0) => ({
+    initial: shouldReduceMotion
+      ? false
+      : { opacity: 0, y: 14 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, amount: 0.12 },
+    transition: shouldReduceMotion
+      ? { duration: 0 }
+      : { ...entranceTransition, delay },
+  });
 
-  const errorClass = "mt-2 text-sm text-red-400";
+  const closeSuccess = () => {
+    setSubmitted(false);
+    setSubmitError("");
+  };
 
   return (
     <section
       id="contact"
-      className="section-padding relative overflow-hidden bg-[#050816]"
+      aria-labelledby="contact-heading"
+      className="section-padding relative isolate overflow-hidden bg-[#050816]"
     >
-      {/* Background glows */}
-      <div className="pointer-events-none absolute left-[-150px] top-1/3 h-[400px] w-[400px] rounded-full bg-blue-600/10 blur-[140px]" />
-      <div className="pointer-events-none absolute right-[-150px] bottom-0 h-[400px] w-[400px] rounded-full bg-purple-600/10 blur-[140px]" />
+      {/* Lightweight ambient background */}
+      <div
+        aria-hidden="true"
+        className="contact-glow contact-glow-blue pointer-events-none absolute left-[-120px] top-1/3 h-56 w-56 rounded-full bg-blue-600/10 sm:h-80 sm:w-80"
+      />
+      <div
+        aria-hidden="true"
+        className="contact-glow contact-glow-purple pointer-events-none absolute bottom-0 right-[-120px] h-56 w-56 rounded-full bg-purple-600/10 sm:h-80 sm:w-80"
+      />
 
       <div className="container-custom relative z-10">
         {/* Heading */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="mx-auto mb-16 max-w-3xl text-center"
+          {...motionProps()}
+          className="mx-auto mb-12 max-w-3xl text-center sm:mb-16"
         >
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-blue-400/20 bg-blue-400/5 px-4 py-2 text-sm text-blue-300">
-            <Sparkles size={15} />
+            <Sparkles size={15} aria-hidden="true" />
             Let&apos;s build something great
           </div>
 
-          <h2 className="text-4xl font-bold tracking-tight text-white md:text-6xl">
+          <h2
+            id="contact-heading"
+            className="text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-6xl"
+          >
             Have an idea?
             <br />
             <span className="gradient-text">
@@ -109,26 +171,23 @@ export default function Contact() {
             </span>
           </h2>
 
-          <p className="mt-6 text-base leading-8 text-slate-400 md:text-lg">
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-400 sm:mt-6 sm:text-lg sm:leading-8">
             Tell us about your project, challenge, or idea. Our team will
             help you find the right technology and strategy to move forward.
           </p>
         </motion.div>
 
-        <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
+        <div className="grid min-w-0 gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:gap-8">
           {/* Contact information */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="glass-card rounded-3xl p-8 md:p-10"
+            {...motionProps(0.05)}
+            className="glass-card min-w-0 rounded-3xl p-6 sm:p-8 md:p-10"
           >
             <p className="text-sm font-medium uppercase tracking-[0.2em] text-blue-400">
               Contact CloudMind
             </p>
 
-            <h3 className="mt-4 text-3xl font-bold text-white">
+            <h3 className="mt-4 text-2xl font-bold text-white sm:text-3xl">
               Let&apos;s start a conversation.
             </h3>
 
@@ -137,48 +196,56 @@ export default function Contact() {
               systems, or exploring AI, we&apos;re ready to help.
             </p>
 
-            <div className="mt-10 space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-blue-400/20 bg-blue-400/10">
-                  <Mail size={19} className="text-blue-400" />
-                </div>
-                <div>
-                  <p className="text-sm text-slate-500">Email</p>
-                  <a
-                    href="mailto:hello@cloudmindsolutions.com"
-                    className="mt-1 block break-all text-white transition hover:text-blue-300"
+            <div className="mt-8 space-y-6 sm:mt-10">
+              {contactItems.map((item) => {
+                const Icon = item.icon;
+
+                const iconColors = {
+                  blue: "border-blue-400/20 bg-blue-400/10 text-blue-400",
+                  cyan: "border-cyan-400/20 bg-cyan-400/10 text-cyan-400",
+                  purple:
+                    "border-purple-400/20 bg-purple-400/10 text-purple-400",
+                };
+
+                return (
+                  <div
+                    key={item.label}
+                    className="flex min-w-0 items-start gap-4"
                   >
-                    hello@cloudmindsolutions.com
-                  </a>
-                </div>
-              </div>
+                    <div
+                      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border ${iconColors[item.color]}`}
+                    >
+                      <Icon size={19} aria-hidden="true" />
+                    </div>
 
-              <div className="flex items-start gap-4">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-cyan-400/20 bg-cyan-400/10">
-                  <Phone size={19} className="text-cyan-400" />
-                </div>
-                <div>
-                  <p className="text-sm text-slate-500">Phone</p>
-                  <p className="mt-1 text-white">+91 XXXXX XXXXX</p>
-                </div>
-              </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm text-slate-500">
+                        {item.label}
+                      </p>
 
-              <div className="flex items-start gap-4">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-purple-400/20 bg-purple-400/10">
-                  <MapPin size={19} className="text-purple-400" />
-                </div>
-                <div>
-                  <p className="text-sm text-slate-500">Location</p>
-                  <p className="mt-1 text-white">India</p>
-                </div>
-              </div>
+                      {"href" in item ? (
+                        <a
+                          href={item.href}
+                          className="mt-1 block break-words text-white transition-colors duration-200 hover:text-blue-300"
+                        >
+                          {item.value}
+                        </a>
+                      ) : (
+                        <p className="mt-1 break-words text-white">
+                          {item.value}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
 
-            <div className="mt-10 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+            <div className="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:mt-10">
               <p className="text-sm font-medium text-white">
                 Looking for something specific?
               </p>
-              <p className="mt-2 text-sm leading-6 text-slate-500">
+              <p className="mt-2 text-sm leading-6 text-slate-400">
                 We work across AI, software development, cloud, data,
                 automation, and digital products.
               </p>
@@ -187,37 +254,35 @@ export default function Contact() {
 
           {/* Contact form */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="glass-card rounded-3xl p-8 md:p-10"
+            {...motionProps(0.1)}
+            className="glass-card min-w-0 rounded-3xl p-6 sm:p-8 md:p-10"
           >
             {submitted ? (
               <div
                 role="status"
-                className="flex min-h-[500px] flex-col items-center justify-center text-center"
+                className="flex min-h-[400px] flex-col items-center justify-center py-10 text-center sm:min-h-[500px]"
               >
                 <div className="flex h-20 w-20 items-center justify-center rounded-full border border-green-400/20 bg-green-400/10">
-                  <Send className="text-green-400" size={30} />
+                  <Send
+                    className="text-green-400"
+                    size={30}
+                    aria-hidden="true"
+                  />
                 </div>
 
-                <h3 className="mt-6 text-3xl font-bold text-white">
+                <h3 className="mt-6 text-2xl font-bold text-white sm:text-3xl">
                   Thanks for reaching out!
                 </h3>
 
                 <p className="mt-4 max-w-md leading-7 text-slate-400">
-                  Your enquiry has been saved successfully. We&apos;ll get back
-                  to you as soon as possible.
+                  Your enquiry has been saved successfully. We&apos;ll get
+                  back to you as soon as possible.
                 </p>
 
                 <button
                   type="button"
-                  onClick={() => {
-                    setSubmitted(false);
-                    setSubmitError("");
-                  }}
-                  className="mt-8 rounded-xl border border-white/10 px-5 py-3 text-sm text-white transition hover:bg-white/5"
+                  onClick={closeSuccess}
+                  className="mt-8 rounded-xl border border-white/10 px-5 py-3 text-sm text-white transition-colors duration-200 hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400"
                 >
                   Send another message
                 </button>
@@ -228,9 +293,8 @@ export default function Contact() {
                 noValidate
                 className="space-y-6"
               >
-                {/* Name and email */}
                 <div className="grid gap-6 md:grid-cols-2">
-                  <div>
+                  <div className="min-w-0">
                     <label
                       htmlFor="contact-name"
                       className="mb-2 block text-sm text-slate-300"
@@ -260,16 +324,13 @@ export default function Contact() {
                       className={inputClass}
                     />
                     {errors.name && (
-                      <p
-                        id="contact-name-error"
-                        className={errorClass}
-                      >
+                      <p id="contact-name-error" className={errorClass}>
                         {errors.name.message}
                       </p>
                     )}
                   </div>
 
-                  <div>
+                  <div className="min-w-0">
                     <label
                       htmlFor="contact-email"
                       className="mb-2 block text-sm text-slate-300"
@@ -287,6 +348,7 @@ export default function Contact() {
                       })}
                       type="email"
                       autoComplete="email"
+                      inputMode="email"
                       placeholder="Your email address"
                       aria-invalid={!!errors.email}
                       aria-describedby={
@@ -295,19 +357,15 @@ export default function Contact() {
                       className={inputClass}
                     />
                     {errors.email && (
-                      <p
-                        id="contact-email-error"
-                        className={errorClass}
-                      >
+                      <p id="contact-email-error" className={errorClass}>
                         {errors.email.message}
                       </p>
                     )}
                   </div>
                 </div>
 
-                {/* Company and service */}
                 <div className="grid gap-6 md:grid-cols-2">
-                  <div>
+                  <div className="min-w-0">
                     <label
                       htmlFor="contact-company"
                       className="mb-2 block text-sm text-slate-300"
@@ -334,16 +392,13 @@ export default function Contact() {
                       className={inputClass}
                     />
                     {errors.company && (
-                      <p
-                        id="contact-company-error"
-                        className={errorClass}
-                      >
+                      <p id="contact-company-error" className={errorClass}>
                         {errors.company.message}
                       </p>
                     )}
                   </div>
 
-                  <div>
+                  <div className="min-w-0">
                     <label
                       htmlFor="contact-service"
                       className="mb-2 block text-sm text-slate-300"
@@ -361,52 +416,15 @@ export default function Contact() {
                           ? "contact-service-error"
                           : undefined
                       }
-                      className={`${inputClass} cursor-pointer bg-[#0b1124] text-white [color-scheme:dark]`}
+                      className={`${inputClass} cursor-pointer bg-[#0b1124] [color-scheme:dark]`}
                     >
-                      <option
-                        value=""
-                        className="bg-[#0b1124] text-slate-400"
-                      >
-                        Select a service
-                      </option>
-                      <option value="ai" className="bg-[#0b1124] text-white">
-                        AI &amp; Machine Learning
-                      </option>
-                      <option
-                        value="software"
-                        className="bg-[#0b1124] text-white"
-                      >
-                        Software Development
-                      </option>
-                      <option value="web" className="bg-[#0b1124] text-white">
-                        Web &amp; App Development
-                      </option>
-                      <option
-                        value="cloud"
-                        className="bg-[#0b1124] text-white"
-                      >
-                        Cloud Solutions
-                      </option>
-                      <option
-                        value="data"
-                        className="bg-[#0b1124] text-white"
-                      >
-                        Data &amp; Analytics
-                      </option>
-                      <option
-                        value="automation"
-                        className="bg-[#0b1124] text-white"
-                      >
-                        Automation
-                      </option>
-                      <option
-                        value="other"
-                        className="bg-[#0b1124] text-white"
-                      >
-                        Something else
-                      </option>
+                      <option value="">Select a service</option>
+                      {contactServices.map((service) => (
+                        <option key={service.value} value={service.value}>
+                          {service.label}
+                        </option>
+                      ))}
                     </select>
-
                     {errors.service && (
                       <p
                         id="contact-service-error"
@@ -419,7 +437,6 @@ export default function Contact() {
                   </div>
                 </div>
 
-                {/* Message */}
                 <div>
                   <label
                     htmlFor="contact-message"
@@ -440,25 +457,22 @@ export default function Contact() {
                         message: "Message is too long",
                       },
                     })}
-                    rows={6}
+                    rows={5}
+                    maxLength={2000}
                     placeholder="Tell us about your idea, requirements, goals, or challenge..."
                     aria-invalid={!!errors.message}
                     aria-describedby={
                       errors.message ? "contact-message-error" : undefined
                     }
-                    className={`${inputClass} resize-none`}
+                    className={`${inputClass} resize-y`}
                   />
                   {errors.message && (
-                    <p
-                      id="contact-message-error"
-                      className={errorClass}
-                    >
+                    <p id="contact-message-error" className={errorClass}>
                       {errors.message.message}
                     </p>
                   )}
                 </div>
 
-                {/* API error */}
                 {submitError && (
                   <p
                     role="alert"
@@ -468,20 +482,20 @@ export default function Contact() {
                   </p>
                 )}
 
-                {/* Submit */}
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="group flex w-full items-center justify-center gap-2 rounded-xl bg-white px-6 py-4 font-semibold text-slate-950 transition hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="group flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-white px-6 py-4 font-semibold text-slate-950 transition-colors duration-200 hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {isSubmitting ? "Sending..." : "Send Message"}
                   <ArrowUpRight
                     size={18}
-                    className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                    aria-hidden="true"
+                    className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                   />
                 </button>
 
-                <p className="text-center text-xs text-slate-600">
+                <p className="text-center text-xs leading-5 text-slate-500">
                   We&apos;ll never share your information with third parties.
                 </p>
               </form>

@@ -20,15 +20,19 @@ export default function Navbar() {
   useEffect(() => {
     if (!mobileOpen) return;
 
+    const previousOverflow = document.body.style.overflow;
+
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
         setMobileOpen(false);
       }
     }
 
+    document.body.style.overflow = "hidden";
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
+      document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [mobileOpen]);
@@ -39,28 +43,19 @@ export default function Navbar() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-4 sm:pt-4">
-      <nav
-        aria-label="Main navigation"
-        className="mx-auto max-w-7xl"
-      >
-        {/* Solid navbar background */}
-        <div className="relative rounded-2xl border border-white/10 bg-[#080D1D] px-3 py-3 shadow-2xl shadow-black/40 sm:px-4">
+      <nav aria-label="Main navigation" className="mx-auto max-w-7xl">
+        <div className="relative rounded-2xl border border-white/10 bg-[#080D1D] px-3 py-3 shadow-2xl shadow-black/30 sm:px-4">
           <div className="flex min-h-10 items-center justify-between gap-3">
-            {/* Logo */}
-            
+            {/* Brand */}
+            <BrandLogo logoSize={44} />
 
-{/* Logo and company name */}
-<BrandLogo logoSize={44} />
-
-
-
-            {/* Desktop navigation */}
+            {/* Desktop links */}
             <div className="hidden items-center gap-6 md:flex lg:gap-8">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="rounded-md text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-4 focus-visible:ring-offset-[#080D1D]"
+                  className="rounded-md text-sm font-medium text-slate-300 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-4 focus-visible:ring-offset-[#080D1D] motion-reduce:transition-none"
                 >
                   {link.name}
                 </Link>
@@ -70,10 +65,9 @@ export default function Navbar() {
             {/* Desktop CTA */}
             <Link
               href="#contact"
-              className="group hidden min-h-11 shrink-0 items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-slate-950 transition-colors duration-200 hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#080D1D] md:inline-flex"
+              className="group hidden min-h-11 shrink-0 items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-slate-950 transition-colors duration-200 hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#080D1D] motion-reduce:transition-none md:inline-flex"
             >
               Let's Talk
-
               <ArrowUpRight
                 aria-hidden="true"
                 size={16}
@@ -81,7 +75,7 @@ export default function Navbar() {
               />
             </Link>
 
-            {/* Mobile menu toggle */}
+            {/* Mobile toggle */}
             <button
               type="button"
               aria-label={
@@ -92,7 +86,7 @@ export default function Navbar() {
               aria-expanded={mobileOpen}
               aria-controls={mobileMenuId}
               onClick={() => setMobileOpen((open) => !open)}
-              className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-white transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 md:hidden"
+              className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04] text-white transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 motion-reduce:transition-none md:hidden"
             >
               {mobileOpen ? (
                 <X aria-hidden="true" size={20} />
@@ -102,19 +96,20 @@ export default function Navbar() {
             </button>
           </div>
 
-          {/* Mobile navigation */}
+          {/* Mobile menu */}
           <div
             id={mobileMenuId}
             hidden={!mobileOpen}
-            className="mt-3 border-t border-white/10 pt-3 md:hidden"
+            className="mobile-nav-panel mt-3 border-t border-white/10 pt-3 md:hidden"
           >
             <div className="flex flex-col gap-1">
-              {navLinks.map((link) => (
+              {navLinks.map((link, index) => (
                 <Link
                   key={link.name}
                   href={link.href}
                   onClick={closeMobileMenu}
-                  className="flex min-h-11 items-center rounded-xl px-4 py-3 text-sm font-medium text-slate-200 transition-colors hover:bg-white/5 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cyan-300"
+                  style={{ "--nav-index": index } as React.CSSProperties}
+                  className="mobile-nav-link flex min-h-12 items-center rounded-xl px-4 py-3 text-sm font-medium text-slate-200 transition-colors hover:bg-white/5 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cyan-300 motion-reduce:transition-none"
                 >
                   {link.name}
                 </Link>
@@ -123,7 +118,7 @@ export default function Navbar() {
               <Link
                 href="#contact"
                 onClick={closeMobileMenu}
-                className="mt-2 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-950 transition-colors hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#080D1D]"
+                className="mobile-nav-link mt-2 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-950 transition-colors hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#080D1D] motion-reduce:transition-none"
               >
                 Let's Talk
                 <ArrowUpRight aria-hidden="true" size={16} />

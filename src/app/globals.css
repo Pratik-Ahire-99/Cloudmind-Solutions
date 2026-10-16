@@ -1,6 +1,10 @@
 
 @import "tailwindcss";
 
+/* =========================================================
+   1. ROOT VARIABLES & BASE STYLES
+   ========================================================= */
+
 :root {
   --background: #050816;
   --foreground: #f8fafc;
@@ -36,7 +40,9 @@ body {
   color: white;
 }
 
-/* Scrollbar */
+/* =========================================================
+   2. SCROLLBAR
+   ========================================================= */
 
 ::-webkit-scrollbar {
   width: 8px;
@@ -55,23 +61,34 @@ body {
   background: #334155;
 }
 
-/* Container */
+/* =========================================================
+   3. LAYOUT
+   ========================================================= */
 
 .container-custom {
   width: min(100% - 2rem, 1280px);
   margin-inline: auto;
 }
 
-/* Gradient text */
+.section-padding {
+  padding-block: 100px;
+}
+
+/* =========================================================
+   4. GRADIENT TEXT & GLOW
+   ========================================================= */
 
 .gradient-text {
-  background: linear-gradient(90deg, #60a5fa, #22d3ee, #a78bfa);
+  background: linear-gradient(
+    90deg,
+    #60a5fa,
+    #22d3ee,
+    #a78bfa
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
-
-/* Desktop glow */
 
 .glow-blue {
   box-shadow:
@@ -79,16 +96,28 @@ body {
     0 0 80px rgba(6, 182, 212, 0.08);
 }
 
-/* Grid background */
+/* =========================================================
+   5. GRID BACKGROUND
+   ========================================================= */
 
 .grid-background {
   background-image:
-    linear-gradient(rgba(148, 163, 184, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
+    linear-gradient(
+      rgba(148, 163, 184, 0.05) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(148, 163, 184, 0.05) 1px,
+      transparent 1px
+    );
   background-size: 50px 50px;
 }
 
-/* Glass card: blur only on desktop */
+/* =========================================================
+   6. GLASS CARDS
+   Blur is enabled only on larger screens.
+   ========================================================= */
 
 .glass-card {
   background: rgba(15, 23, 42, 0.92);
@@ -103,13 +132,9 @@ body {
   }
 }
 
-/* Section spacing */
-
-.section-padding {
-  padding-block: 100px;
-}
-
-/* Hero entrance */
+/* =========================================================
+   7. HERO ENTRANCE ANIMATION
+   ========================================================= */
 
 .hero-entrance {
   opacity: 0;
@@ -128,7 +153,10 @@ body {
   }
 }
 
-/* Solutions decorative animations: desktop only */
+/* =========================================================
+   8. SOLUTIONS DECORATIVE ANIMATIONS
+   Desktop only; no continuous orbit animation on mobile.
+   ========================================================= */
 
 @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
   .solutions-orbit {
@@ -180,74 +208,11 @@ body {
   }
 }
 
-/* Tablet */
+/* =========================================================
+   9. ABOUT ILLUSTRATION
+   Continuous rotation only on desktop.
+   ========================================================= */
 
-@media (min-width: 640px) and (max-width: 1023px) {
-  .section-padding {
-    padding-block: 80px;
-  }
-
-  .grid-background {
-    background-size: 40px 40px;
-  }
-}
-
-/* Mobile */
-
-@media (max-width: 639px) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  .section-padding {
-    padding-block: 70px;
-  }
-
-  .grid-background {
-    background-size: 40px 40px;
-  }
-
-  .glow-blue {
-    box-shadow: none;
-  }
-
-  .solutions-orbit,
-  .solutions-orbit-reverse,
-  .solutions-node {
-    animation: none !important;
-  }
-}
-
-/* Accessibility */
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto !important;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-
-  .hero-entrance {
-    opacity: 1;
-    animation: none;
-    transform: none;
-  }
-
-  .solutions-orbit,
-  .solutions-orbit-reverse,
-  .solutions-node {
-    animation: none !important;
-  }
-}
-
-/* About illustration: rotate only on desktop */
 @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
   .about-orbit-outer {
     animation: about-orbit-rotate 25s linear infinite;
@@ -275,5 +240,240 @@ body {
 
   to {
     transform: translate(-50%, -50%) rotate(-360deg);
+  }
+}
+
+/* =========================================================
+   10. MOBILE NAVIGATION ANIMATIONS
+   ========================================================= */
+
+@keyframes mobile-nav-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes mobile-link-enter {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mobile-nav-panel {
+  animation: mobile-nav-enter 180ms ease-out both;
+}
+
+.mobile-nav-link {
+  animation: mobile-link-enter 220ms ease-out both;
+  animation-delay: calc(var(--nav-index, 0) * 25ms);
+}
+
+/* =========================================================
+   11. CONTACT SECTION GLOW
+   Smaller blur on mobile.
+   ========================================================= */
+
+.contact-glow {
+  filter: blur(40px);
+  -webkit-filter: blur(40px);
+}
+
+@media (min-width: 640px) {
+  .contact-glow {
+    filter: blur(75px);
+    -webkit-filter: blur(75px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .contact-glow {
+    filter: blur(110px);
+    -webkit-filter: blur(110px);
+  }
+}
+
+/* =========================================================
+   12. FOOTER GLOW
+   ========================================================= */
+
+.footer-glow {
+  filter: blur(35px);
+  -webkit-filter: blur(35px);
+}
+
+@media (min-width: 640px) {
+  .footer-glow {
+    filter: blur(60px);
+    -webkit-filter: blur(60px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer-glow {
+    filter: blur(85px);
+    -webkit-filter: blur(85px);
+  }
+}
+
+/* =========================================================
+   13. PORTFOLIO SECTION
+   ========================================================= */
+
+.portfolio-glow {
+  filter: blur(45px);
+  -webkit-filter: blur(45px);
+}
+
+@media (min-width: 640px) {
+  .portfolio-glow {
+    filter: blur(65px);
+    -webkit-filter: blur(65px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .portfolio-glow {
+    filter: blur(80px);
+    -webkit-filter: blur(80px);
+  }
+
+  .portfolio-preview {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .portfolio-card {
+    transition: border-color 220ms ease;
+  }
+
+  .portfolio-card:hover {
+    border-color: rgba(103, 232, 249, 0.25);
+  }
+}
+
+/* =========================================================
+   14. SERVICES SECTION
+   ========================================================= */
+
+.services-glow {
+  filter: blur(40px);
+  -webkit-filter: blur(40px);
+}
+
+.service-card-glow {
+  filter: blur(35px);
+  -webkit-filter: blur(35px);
+}
+
+@media (min-width: 640px) {
+  .services-glow {
+    filter: blur(65px);
+    -webkit-filter: blur(65px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .services-glow {
+    filter: blur(90px);
+    -webkit-filter: blur(90px);
+  }
+}
+
+/* =========================================================
+   15. TABLET RESPONSIVENESS
+   ========================================================= */
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .section-padding {
+    padding-block: 80px;
+  }
+
+  .grid-background {
+    background-size: 40px 40px;
+  }
+}
+
+/* =========================================================
+   16. MOBILE RESPONSIVENESS
+   ========================================================= */
+
+@media (max-width: 639px) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .section-padding {
+    padding-block: 70px;
+  }
+
+  .grid-background {
+    background-size: 40px 40px;
+  }
+
+  .glow-blue {
+    box-shadow: none;
+  }
+
+  .solutions-orbit,
+  .solutions-orbit-reverse,
+  .solutions-node {
+    animation: none !important;
+  }
+}
+
+/* =========================================================
+   17. ACCESSIBILITY
+   Preserve animations for users who have not requested
+   reduced motion; minimize them when the OS requests it.
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .hero-entrance {
+    opacity: 1;
+    animation: none;
+    transform: none;
+  }
+
+  .solutions-orbit,
+  .solutions-orbit-reverse,
+  .solutions-node,
+  .about-orbit-outer,
+  .about-orbit-inner,
+  .mobile-nav-panel,
+  .mobile-nav-link {
+    animation: none !important;
+  }
+
+  .portfolio-card,
+  .portfolio-preview,
+  .portfolio-glow,
+  .service-card,
+  .service-card-glow {
+    transition: none !important;
   }
 }
