@@ -1,3 +1,4 @@
+
 "use client";
 
 import { motion } from "framer-motion";
@@ -11,11 +12,14 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  contactSchema,
-  type ContactFormData,
-} from "@/lib/validations/contact";
+
+type ContactFormData = {
+  name: string;
+  email: string;
+  company?: string;
+  service: string;
+  message: string;
+};
 
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
@@ -27,7 +31,8 @@ export default function Contact() {
     formState: { errors, isSubmitting },
     reset,
   } = useForm<ContactFormData>({
-    resolver: zodResolver(contactSchema),
+    mode: "onSubmit",
+    reValidateMode: "onChange",
     defaultValues: {
       name: "",
       email: "",
@@ -53,7 +58,8 @@ export default function Contact() {
 
       if (!response.ok || !result.success) {
         setSubmitError(
-          result.message || "Unable to submit your enquiry. Please try again."
+          result.message ||
+            "Unable to submit your enquiry. Please try again."
         );
         return;
       }
@@ -98,7 +104,9 @@ export default function Contact() {
           <h2 className="text-4xl font-bold tracking-tight text-white md:text-6xl">
             Have an idea?
             <br />
-            <span className="gradient-text">Let&apos;s make it real.</span>
+            <span className="gradient-text">
+              Let&apos;s make it real.
+            </span>
           </h2>
 
           <p className="mt-6 text-base leading-8 text-slate-400 md:text-lg">
@@ -231,10 +239,20 @@ export default function Contact() {
                     </label>
                     <input
                       id="contact-name"
-                      {...register("name")}
+                      {...register("name", {
+                        required: "Name is required",
+                        minLength: {
+                          value: 2,
+                          message: "Name must be at least 2 characters",
+                        },
+                        maxLength: {
+                          value: 100,
+                          message: "Name is too long",
+                        },
+                      })}
                       type="text"
                       autoComplete="name"
-                      placeholder="Enter your name "
+                      placeholder="Enter your name"
                       aria-invalid={!!errors.name}
                       aria-describedby={
                         errors.name ? "contact-name-error" : undefined
@@ -242,7 +260,10 @@ export default function Contact() {
                       className={inputClass}
                     />
                     {errors.name && (
-                      <p id="contact-name-error" className={errorClass}>
+                      <p
+                        id="contact-name-error"
+                        className={errorClass}
+                      >
                         {errors.name.message}
                       </p>
                     )}
@@ -257,7 +278,13 @@ export default function Contact() {
                     </label>
                     <input
                       id="contact-email"
-                      {...register("email")}
+                      {...register("email", {
+                        required: "Email is required",
+                        pattern: {
+                          value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                          message: "Please enter a valid email address",
+                        },
+                      })}
                       type="email"
                       autoComplete="email"
                       placeholder="Your email address"
@@ -268,7 +295,10 @@ export default function Contact() {
                       className={inputClass}
                     />
                     {errors.email && (
-                      <p id="contact-email-error" className={errorClass}>
+                      <p
+                        id="contact-email-error"
+                        className={errorClass}
+                      >
                         {errors.email.message}
                       </p>
                     )}
@@ -286,78 +316,107 @@ export default function Contact() {
                     </label>
                     <input
                       id="contact-company"
-                      {...register("company")}
+                      {...register("company", {
+                        maxLength: {
+                          value: 100,
+                          message: "Company name is too long",
+                        },
+                      })}
                       type="text"
                       autoComplete="organization"
                       placeholder="Your company"
                       aria-invalid={!!errors.company}
                       aria-describedby={
-                        errors.company ? "contact-company-error" : undefined
+                        errors.company
+                          ? "contact-company-error"
+                          : undefined
                       }
                       className={inputClass}
                     />
                     {errors.company && (
-                      <p id="contact-company-error" className={errorClass}>
+                      <p
+                        id="contact-company-error"
+                        className={errorClass}
+                      >
                         {errors.company.message}
                       </p>
                     )}
                   </div>
 
-                  
-<div>
-  <label
-    htmlFor="contact-service"
-    className="mb-2 block text-sm text-slate-300"
-  >
-    What do you need?
-  </label>
+                  <div>
+                    <label
+                      htmlFor="contact-service"
+                      className="mb-2 block text-sm text-slate-300"
+                    >
+                      What do you need?
+                    </label>
+                    <select
+                      id="contact-service"
+                      {...register("service", {
+                        required: "Please select a service",
+                      })}
+                      aria-invalid={!!errors.service}
+                      aria-describedby={
+                        errors.service
+                          ? "contact-service-error"
+                          : undefined
+                      }
+                      className={`${inputClass} cursor-pointer bg-[#0b1124] text-white [color-scheme:dark]`}
+                    >
+                      <option
+                        value=""
+                        className="bg-[#0b1124] text-slate-400"
+                      >
+                        Select a service
+                      </option>
+                      <option value="ai" className="bg-[#0b1124] text-white">
+                        AI &amp; Machine Learning
+                      </option>
+                      <option
+                        value="software"
+                        className="bg-[#0b1124] text-white"
+                      >
+                        Software Development
+                      </option>
+                      <option value="web" className="bg-[#0b1124] text-white">
+                        Web &amp; App Development
+                      </option>
+                      <option
+                        value="cloud"
+                        className="bg-[#0b1124] text-white"
+                      >
+                        Cloud Solutions
+                      </option>
+                      <option
+                        value="data"
+                        className="bg-[#0b1124] text-white"
+                      >
+                        Data &amp; Analytics
+                      </option>
+                      <option
+                        value="automation"
+                        className="bg-[#0b1124] text-white"
+                      >
+                        Automation
+                      </option>
+                      <option
+                        value="other"
+                        className="bg-[#0b1124] text-white"
+                      >
+                        Something else
+                      </option>
+                    </select>
 
-  <select
-    id="contact-service"
-    {...register("service")}
-    aria-invalid={!!errors.service}
-    aria-describedby={
-      errors.service ? "contact-service-error" : undefined
-    }
-    className={`${inputClass} w-full cursor-pointer bg-[#0b1124] text-white [color-scheme:dark]`}
-  >
-    <option value="" className="bg-[#0b1124] text-slate-400">
-      Select a service
-    </option>
-    <option value="ai" className="bg-[#0b1124] text-white">
-      AI &amp; Machine Learning
-    </option>
-    <option value="software" className="bg-[#0b1124] text-white">
-      Software Development
-    </option>
-    <option value="web" className="bg-[#0b1124] text-white">
-      Web &amp; App Development
-    </option>
-    <option value="cloud" className="bg-[#0b1124] text-white">
-      Cloud Solutions
-    </option>
-    <option value="data" className="bg-[#0b1124] text-white">
-      Data &amp; Analytics
-    </option>
-    <option value="automation" className="bg-[#0b1124] text-white">
-      Automation
-    </option>
-    <option value="other" className="bg-[#0b1124] text-white">
-      Something else
-    </option>
-  </select>
-
-  {errors.service && (
-    <p
-      id="contact-service-error"
-      className={errorClass}
-      role="alert"
-    >
-      {errors.service.message}
-    </p>
-  )}
-</div>
-
+                    {errors.service && (
+                      <p
+                        id="contact-service-error"
+                        className={errorClass}
+                        role="alert"
+                      >
+                        {errors.service.message}
+                      </p>
+                    )}
+                  </div>
                 </div>
 
                 {/* Message */}
@@ -370,7 +429,17 @@ export default function Contact() {
                   </label>
                   <textarea
                     id="contact-message"
-                    {...register("message")}
+                    {...register("message", {
+                      required: "Message is required",
+                      minLength: {
+                        value: 10,
+                        message: "Message must be at least 10 characters",
+                      },
+                      maxLength: {
+                        value: 2000,
+                        message: "Message is too long",
+                      },
+                    })}
                     rows={6}
                     placeholder="Tell us about your idea, requirements, goals, or challenge..."
                     aria-invalid={!!errors.message}
@@ -380,7 +449,10 @@ export default function Contact() {
                     className={`${inputClass} resize-none`}
                   />
                   {errors.message && (
-                    <p id="contact-message-error" className={errorClass}>
+                    <p
+                      id="contact-message-error"
+                      className={errorClass}
+                    >
                       {errors.message.message}
                     </p>
                   )}

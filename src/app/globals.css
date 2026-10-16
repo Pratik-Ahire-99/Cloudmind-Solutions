@@ -4,19 +4,18 @@
 :root {
   --background: #050816;
   --foreground: #f8fafc;
-
   --primary: #3b82f6;
   --primary-dark: #2563eb;
   --cyan: #06b6d4;
   --purple: #8b5cf6;
-
   --muted: #94a3b8;
   --border: rgba(148, 163, 184, 0.12);
-
-  --card: rgba(15, 23, 42, 0.65);
+  --card: #0f172a;
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -66,18 +65,13 @@ body {
 /* Gradient text */
 
 .gradient-text {
-  background: linear-gradient(
-    90deg,
-    #60a5fa,
-    #22d3ee,
-    #a78bfa
-  );
+  background: linear-gradient(90deg, #60a5fa, #22d3ee, #a78bfa);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
-/* Glow */
+/* Desktop glow */
 
 .glow-blue {
   box-shadow:
@@ -89,72 +83,166 @@ body {
 
 .grid-background {
   background-image:
-    linear-gradient(
-      rgba(148, 163, 184, 0.05) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(148, 163, 184, 0.05) 1px,
-      transparent 1px
-    );
-
-  background-size: 50px 50%;
+    linear-gradient(rgba(148, 163, 184, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
 }
 
-/* Glass card */
+/* Glass card: blur only on desktop */
 
 .glass-card {
-  background: rgba(15, 23, 42, 0.55);
+  background: rgba(15, 23, 42, 0.92);
   border: 1px solid var(--border);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
 }
 
-/* Section */
+@media (min-width: 1024px) {
+  .glass-card {
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+/* Section spacing */
 
 .section-padding {
-  padding-top: 100px;
-  padding-bottom: 100px;
+  padding-block: 100px;
 }
 
-/* Mobile performance improvements */
+/* Hero entrance */
+
+.hero-entrance {
+  opacity: 0;
+  animation: hero-fade-up 600ms ease-out forwards;
+}
+
+@keyframes hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Solutions decorative animations: desktop only */
+
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .solutions-orbit {
+    animation: solutions-rotate 30s linear infinite;
+  }
+
+  .solutions-orbit-reverse {
+    animation: solutions-rotate-reverse 20s linear infinite;
+  }
+
+  .solutions-node:nth-of-type(1) {
+    animation: solutions-float 4s ease-in-out infinite;
+  }
+
+  .solutions-node:nth-of-type(2) {
+    animation: solutions-float-reverse 4.5s ease-in-out infinite;
+  }
+
+  .solutions-node:nth-of-type(3) {
+    animation: solutions-float 4.2s ease-in-out infinite;
+  }
+
+  .solutions-node:nth-of-type(4) {
+    animation: solutions-float-reverse 3.8s ease-in-out infinite;
+  }
+}
+
+@keyframes solutions-rotate {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes solutions-rotate-reverse {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes solutions-float {
+  50% {
+    translate: 0 -6px;
+  }
+}
+
+@keyframes solutions-float-reverse {
+  50% {
+    translate: 0 6px;
+  }
+}
+
+/* Tablet */
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .section-padding {
+    padding-block: 80px;
+  }
+
+  .grid-background {
+    background-size: 40px 40px;
+  }
+}
+
+/* Mobile */
 
 @media (max-width: 639px) {
   html {
     scroll-behavior: auto;
   }
 
-  .glass-card {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    background: rgba(15, 23, 42, 0.88);
+  .section-padding {
+    padding-block: 70px;
   }
 
-  .section-padding {
-    padding-top: 70px;
-    padding-bottom: 70px;
+  .grid-background {
+    background-size: 40px 40px;
+  }
+
+  .glow-blue {
+    box-shadow: none;
+  }
+
+  .solutions-orbit,
+  .solutions-orbit-reverse,
+  .solutions-node {
+    animation: none !important;
   }
 }
 
-/* Tablet section spacing */
-
-@media (min-width: 640px) and (max-width: 768px) {
-  .section-padding {
-    padding-top: 80px;
-    padding-bottom: 80px;
-  }
-}
-
-/* Accessibility: respect reduced-motion preferences */
+/* Accessibility */
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
   *,
   *::before,
   *::after {
-    scroll-behavior: auto !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .hero-entrance {
+    opacity: 1;
+    animation: none;
+    transform: none;
+  }
+
+  .solutions-orbit,
+  .solutions-orbit-reverse,
+  .solutions-node {
+    animation: none !important;
   }
 }

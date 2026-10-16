@@ -2,7 +2,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -12,6 +11,7 @@ import {
   Database,
   Code2,
 } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 
 const technologies = [
   {
@@ -45,7 +45,9 @@ export default function Hero() {
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 639px)");
 
-    const updateMobile = () => setIsMobile(mediaQuery.matches);
+    const updateMobile = () => {
+      setIsMobile(mediaQuery.matches);
+    };
 
     updateMobile();
     mediaQuery.addEventListener("change", updateMobile);
@@ -55,13 +57,11 @@ export default function Hero() {
     };
   }, []);
 
-  const disableEntranceAnimation =
-    Boolean(shouldReduceMotion) || isMobile;
+  const disableAnimation = Boolean(shouldReduceMotion) || isMobile;
 
-  const entranceTransition = (duration: number, delay = 0) => ({
-    duration: disableEntranceAnimation ? 0 : duration,
-    delay: disableEntranceAnimation ? 0 : delay,
-  });
+  const entranceClass = disableAnimation
+    ? "opacity-100"
+    : "hero-entrance";
 
   return (
     <section
@@ -74,7 +74,7 @@ export default function Hero() {
         className="grid-background pointer-events-none absolute inset-0 opacity-50"
       />
 
-      {/* Optimized ambient lighting */}
+      {/* Ambient lighting */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute left-1/2 top-[35%] h-[180px] w-[180px] -translate-x-1/2 rounded-full bg-blue-600/[0.08] blur-[45px] sm:h-[400px] sm:w-[400px] sm:blur-[80px] lg:h-[500px] lg:w-[500px] lg:blur-[100px]"
@@ -90,135 +90,115 @@ export default function Hero() {
         className="pointer-events-none absolute bottom-[10%] right-[5%] h-[150px] w-[150px] rounded-full bg-purple-600/[0.04] blur-[45px] sm:h-[250px] sm:w-[250px] sm:blur-[80px]"
       />
 
-      {/* Floating technology cards: desktop and large tablets */}
-      {technologies.map((item, index) => {
-        const Icon = item.icon;
+      {/* Floating technology cards: desktop only */}
+      {!disableAnimation &&
+        technologies.map((item, index) => {
+          const Icon = item.icon;
 
-        return (
-          <motion.div
-            key={item.label}
-            aria-hidden="true"
-            className={`pointer-events-none absolute ${item.position} hidden lg:block`}
-            initial={
-              shouldReduceMotion
-                ? false
-                : { opacity: 0, y: 16 }
-            }
-            animate={
-              shouldReduceMotion
-                ? { opacity: 1, y: 0 }
-                : {
-                    opacity: 1,
-                    y: [0, -8, 0],
-                  }
-            }
-            transition={
-              shouldReduceMotion
-                ? { duration: 0 }
-                : {
-                    opacity: {
-                      duration: 0.5,
-                      delay: index * 0.12,
-                    },
-                    y: {
-                      duration: 4 + index,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    },
-                  }
-            }
-          >
-            <div className="glass-card flex items-center gap-3 rounded-2xl px-4 py-3 shadow-xl shadow-black/10">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5">
-                <Icon size={18} className="text-cyan-300" />
+          return (
+            <motion.div
+              key={item.label}
+              aria-hidden="true"
+              className={`pointer-events-none absolute hidden lg:block ${item.position}`}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{
+                opacity: 1,
+                y: [0, -6, 0],
+              }}
+              transition={{
+                opacity: {
+                  duration: 0.4,
+                  delay: index * 0.08,
+                },
+                y: {
+                  duration: 5 + index,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                },
+              }}
+            >
+              <div className="glass-card flex items-center gap-3 rounded-2xl px-4 py-3 shadow-xl shadow-black/10">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/5">
+                  <Icon size={18} className="text-cyan-300" />
+                </div>
+
+                <span className="text-sm font-medium text-slate-300">
+                  {item.label}
+                </span>
               </div>
-
-              <span className="text-sm font-medium text-slate-300">
-                {item.label}
-              </span>
-            </div>
-          </motion.div>
-        );
-      })}
+            </motion.div>
+          );
+        })}
 
       {/* Main hero content */}
       <div className="container-custom relative z-10 flex min-h-[min(680px,calc(100svh-10rem))] items-center justify-center">
         <div className="mx-auto w-full max-w-5xl text-center">
           {/* Eyebrow */}
-          <motion.div
-            initial={
-              disableEntranceAnimation
-                ? false
-                : { opacity: 0, y: 12 }
+          <div
+            className={`${entranceClass} mb-7 inline-flex max-w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-slate-900/70 px-3 py-2 sm:mb-8 sm:px-4`}
+            style={
+              disableAnimation
+                ? undefined
+                : { animationDelay: "0ms" }
             }
-            animate={{ opacity: 1, y: 0 }}
-            transition={entranceTransition(0.5)}
-            className="mb-7 inline-flex max-w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-slate-900/70 px-3 py-2 sm:mb-8 sm:px-4"
           >
             <span
               aria-hidden="true"
               className="relative flex h-2 w-2 shrink-0"
             >
               <span className="absolute hidden h-full w-full rounded-full bg-cyan-400 opacity-50 motion-reduce:animate-none sm:inline-flex sm:animate-ping" />
-
               <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-400" />
             </span>
 
             <span className="text-xs font-medium leading-5 tracking-wide text-slate-300 sm:text-sm">
               Building the future with intelligent technology
             </span>
-          </motion.div>
+          </div>
 
           {/* Main heading */}
-          <motion.h1
+          <h1
             id="hero-heading"
-            initial={
-              disableEntranceAnimation
-                ? false
-                : { opacity: 0, y: 20 }
+            className={`${entranceClass} mx-auto max-w-4xl text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl sm:leading-[1.08] md:text-7xl lg:text-8xl`}
+            style={
+              disableAnimation
+                ? undefined
+                : { animationDelay: "80ms" }
             }
-            animate={{ opacity: 1, y: 0 }}
-            transition={entranceTransition(0.65, 0.08)}
-            className="mx-auto max-w-4xl text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl sm:leading-[1.08] md:text-7xl lg:text-8xl"
           >
             Technology that
             <br className="hidden sm:block" />{" "}
             <span className="gradient-text">
               moves business forward.
             </span>
-          </motion.h1>
+          </h1>
 
           {/* Description */}
-          <motion.p
-            initial={
-              disableEntranceAnimation
-                ? false
-                : { opacity: 0, y: 16 }
+          <p
+            className={`${entranceClass} mx-auto mt-6 max-w-2xl text-base leading-7 text-slate-300 sm:mt-7 sm:text-lg sm:leading-8`}
+            style={
+              disableAnimation
+                ? undefined
+                : { animationDelay: "160ms" }
             }
-            animate={{ opacity: 1, y: 0 }}
-            transition={entranceTransition(0.6, 0.18)}
-            className="mx-auto mt-6 max-w-2xl text-base leading-7 text-slate-300 sm:mt-7 sm:text-lg sm:leading-8"
           >
             CloudMind Solutions builds intelligent software,
             AI-powered solutions, cloud platforms, and modern
             digital experiences that help businesses grow faster
             and operate smarter.
-          </motion.p>
+          </p>
 
           {/* Calls to action */}
-          <motion.div
-            initial={
-              disableEntranceAnimation
-                ? false
-                : { opacity: 0, y: 16 }
+          <div
+            className={`${entranceClass} mt-8 flex w-full flex-col items-stretch justify-center gap-3 sm:mt-9 sm:w-auto sm:flex-row sm:items-center sm:gap-4`}
+            style={
+              disableAnimation
+                ? undefined
+                : { animationDelay: "240ms" }
             }
-            animate={{ opacity: 1, y: 0 }}
-            transition={entranceTransition(0.6, 0.28)}
-            className="mt-8 flex w-full flex-col items-stretch justify-center gap-3 sm:mt-9 sm:w-auto sm:flex-row sm:items-center sm:gap-4"
           >
             <Link
               href="#contact"
-              className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold text-slate-950 transition-colors duration-200 hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050816] sm:w-auto"
+              className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 text-sm font-semibold text-slate-950 transition-colors duration-200 hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050816] sm:w-auto motion-reduce:transition-none"
             >
               Start a Project
 
@@ -231,7 +211,7 @@ export default function Hero() {
 
             <Link
               href="#services"
-              className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.04] px-6 py-3.5 text-sm font-semibold text-white transition-colors duration-200 hover:border-white/25 hover:bg-white/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050816] sm:w-auto"
+              className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.04] px-6 py-3.5 text-sm font-semibold text-white transition-colors duration-200 hover:border-white/25 hover:bg-white/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050816] sm:w-auto motion-reduce:transition-none"
             >
               Explore Services
 
@@ -241,19 +221,17 @@ export default function Hero() {
                 className="transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transition-none"
               />
             </Link>
-          </motion.div>
+          </div>
 
           {/* Technology indicators */}
-          <motion.div
+          <div
             aria-label="Our technology areas"
-            initial={
-              disableEntranceAnimation
-                ? false
-                : { opacity: 0 }
+            className={`${entranceClass} mt-10 flex flex-wrap items-center justify-center gap-2 sm:mt-12 sm:gap-3`}
+            style={
+              disableAnimation
+                ? undefined
+                : { animationDelay: "320ms" }
             }
-            animate={{ opacity: 1 }}
-            transition={entranceTransition(0.7, 0.45)}
-            className="mt-10 flex flex-wrap items-center justify-center gap-2 sm:mt-12 sm:gap-3"
           >
             {technologyTags.map((technology) => (
               <span
@@ -263,7 +241,7 @@ export default function Hero() {
                 {technology}
               </span>
             ))}
-          </motion.div>
+          </div>
         </div>
       </div>
 
