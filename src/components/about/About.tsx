@@ -1,4 +1,6 @@
+
 "use client";
+
 import Image from "next/image";
 import { motion } from "framer-motion";
 import {
@@ -51,7 +53,7 @@ export default function About() {
       className="section-padding relative overflow-hidden bg-[#050816]"
     >
       {/* Background decoration */}
-      <div className="pointer-events-none absolute right-[-10%] top-[10%] h-[500px] w-[500px] rounded-full bg-purple-600/5 blur-[140px]" />
+      <div className="pointer-events-none absolute right-[-10%] top-[10%] h-[300px] w-[300px] rounded-full bg-purple-600/5 blur-[60px] sm:h-[400px] sm:w-[400px] sm:blur-[90px] lg:h-[500px] lg:w-[500px] lg:blur-[140px]" />
 
       <div className="container-custom relative z-10">
         {/* Main about */}
@@ -80,7 +82,9 @@ export default function About() {
               className="text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl"
             >
               We turn complex ideas into
-              <span className="gradient-text"> intelligent solutions.</span>
+              <span className="gradient-text">
+                {" "}intelligent solutions.
+              </span>
             </motion.h2>
 
             <motion.p
@@ -139,44 +143,32 @@ export default function About() {
           >
             <div className="glass-card relative min-h-[430px] overflow-hidden rounded-[2rem] p-8">
               {/* Grid */}
-              <div className="absolute inset-0 grid-background opacity-40" />
+              <div className="grid-background absolute inset-0 opacity-40" />
 
-              {/* Central glow */}
-              <div className="absolute left-1/2 top-1/2 h-48 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/10 blur-[80px]" />
+              {/* Central glow: smaller blur on mobile */}
+              <div className="pointer-events-none absolute left-1/2 top-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/10 blur-[40px] sm:h-40 sm:w-40 sm:blur-[60px] lg:h-48 lg:w-48 lg:blur-[80px]" />
 
-              {/* Orbit */}
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{
-                  duration: 25,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}
+              {/* Static orbit rings: no continuous mobile animation */}
+              <div
+                aria-hidden="true"
                 className="absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10"
               />
 
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{
-                  duration: 18,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}
+              <div
+                aria-hidden="true"
                 className="absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-400/10"
               />
 
-              
-{/* Center logo */}
-<div className="absolute left-1/2 top-1/2 z-10 flex h-28 w-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center ">
-  <Image
-    src="/logos/cloudmind-logo.png"
-    alt="CloudMind Solutions logo"
-    width={88}
-    height={88}
-    className="h-[88px] w-[88px] rounded-2xl object-contain"
-  />
-</div>
-
+              {/* Center logo */}
+              <div className="absolute left-1/2 top-1/2 z-10 flex h-28 w-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center">
+                <Image
+                  src="/logos/cloudmind-logo.png"
+                  alt="CloudMind Solutions logo"
+                  width={88}
+                  height={88}
+                  className="h-[88px] w-[88px] rounded-2xl object-contain"
+                />
+              </div>
 
               {/* Floating nodes */}
               <div className="absolute left-[18%] top-[22%] flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5">
@@ -195,6 +187,7 @@ export default function About() {
                 <Zap size={18} className="text-cyan-300" />
               </div>
 
+              {/* Status bar */}
               <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between rounded-xl border border-white/5 bg-black/20 px-4 py-3">
                 <span className="text-xs text-slate-500">
                   Engineering • Intelligence • Growth

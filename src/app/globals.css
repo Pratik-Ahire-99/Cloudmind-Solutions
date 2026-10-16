@@ -246,3 +246,34 @@ body {
     animation: none !important;
   }
 }
+
+/* About illustration: rotate only on desktop */
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .about-orbit-outer {
+    animation: about-orbit-rotate 25s linear infinite;
+  }
+
+  .about-orbit-inner {
+    animation: about-orbit-rotate-reverse 18s linear infinite;
+  }
+}
+
+@keyframes about-orbit-rotate {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes about-orbit-rotate-reverse {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(-360deg);
+  }
+}
