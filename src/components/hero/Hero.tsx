@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import {
@@ -35,16 +36,32 @@ const technologies = [
   },
 ];
 
-const technologyTags = [
-  "AI",
-  "Cloud",
-  "Data",
-  "Software",
-  "Automation",
-];
+const technologyTags = ["AI", "Cloud", "Data", "Software", "Automation"];
 
 export default function Hero() {
   const shouldReduceMotion = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 639px)");
+
+    const updateMobile = () => setIsMobile(mediaQuery.matches);
+
+    updateMobile();
+    mediaQuery.addEventListener("change", updateMobile);
+
+    return () => {
+      mediaQuery.removeEventListener("change", updateMobile);
+    };
+  }, []);
+
+  const disableEntranceAnimation =
+    Boolean(shouldReduceMotion) || isMobile;
+
+  const entranceTransition = (duration: number, delay = 0) => ({
+    duration: disableEntranceAnimation ? 0 : duration,
+    delay: disableEntranceAnimation ? 0 : delay,
+  });
 
   return (
     <section
@@ -57,23 +74,23 @@ export default function Hero() {
         className="grid-background pointer-events-none absolute inset-0 opacity-50"
       />
 
-      {/* Ambient lighting */}
+      {/* Optimized ambient lighting */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-[35%] h-[300px] w-[300px] -translate-x-1/2 rounded-full bg-blue-600/10 blur-[100px] sm:h-[500px] sm:w-[500px] sm:blur-[120px]"
+        className="pointer-events-none absolute left-1/2 top-[35%] h-[180px] w-[180px] -translate-x-1/2 rounded-full bg-blue-600/[0.08] blur-[45px] sm:h-[400px] sm:w-[400px] sm:blur-[80px] lg:h-[500px] lg:w-[500px] lg:blur-[100px]"
       />
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute left-[5%] top-[20%] h-[200px] w-[200px] rounded-full bg-cyan-500/5 blur-[90px]"
+        className="pointer-events-none absolute left-[5%] top-[20%] h-[120px] w-[120px] rounded-full bg-cyan-500/[0.04] blur-[40px] sm:h-[200px] sm:w-[200px] sm:blur-[70px]"
       />
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-[10%] right-[5%] h-[250px] w-[250px] rounded-full bg-purple-600/5 blur-[100px]"
+        className="pointer-events-none absolute bottom-[10%] right-[5%] h-[150px] w-[150px] rounded-full bg-purple-600/[0.04] blur-[45px] sm:h-[250px] sm:w-[250px] sm:blur-[80px]"
       />
 
-      {/* Floating technology cards */}
+      {/* Floating technology cards: desktop and large tablets */}
       {technologies.map((item, index) => {
         const Icon = item.icon;
 
@@ -130,21 +147,20 @@ export default function Hero() {
           {/* Eyebrow */}
           <motion.div
             initial={
-              shouldReduceMotion
+              disableEntranceAnimation
                 ? false
                 : { opacity: 0, y: 12 }
             }
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: shouldReduceMotion ? 0 : 0.5 }}
-            className="mb-7 inline-flex max-w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-slate-900/70 px-3 py-2 backdrop-blur-xl sm:mb-8 sm:px-4"
+            transition={entranceTransition(0.5)}
+            className="mb-7 inline-flex max-w-full items-center justify-center gap-2 rounded-full border border-white/10 bg-slate-900/70 px-3 py-2 sm:mb-8 sm:px-4"
           >
             <span
               aria-hidden="true"
               className="relative flex h-2 w-2 shrink-0"
             >
-              {!shouldReduceMotion && (
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-50 motion-reduce:animate-none" />
-              )}
+              <span className="absolute hidden h-full w-full rounded-full bg-cyan-400 opacity-50 motion-reduce:animate-none sm:inline-flex sm:animate-ping" />
+
               <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-400" />
             </span>
 
@@ -157,15 +173,12 @@ export default function Hero() {
           <motion.h1
             id="hero-heading"
             initial={
-              shouldReduceMotion
+              disableEntranceAnimation
                 ? false
                 : { opacity: 0, y: 20 }
             }
             animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: shouldReduceMotion ? 0 : 0.65,
-              delay: shouldReduceMotion ? 0 : 0.08,
-            }}
+            transition={entranceTransition(0.65, 0.08)}
             className="mx-auto max-w-4xl text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl sm:leading-[1.08] md:text-7xl lg:text-8xl"
           >
             Technology that
@@ -178,15 +191,12 @@ export default function Hero() {
           {/* Description */}
           <motion.p
             initial={
-              shouldReduceMotion
+              disableEntranceAnimation
                 ? false
                 : { opacity: 0, y: 16 }
             }
             animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: shouldReduceMotion ? 0 : 0.6,
-              delay: shouldReduceMotion ? 0 : 0.18,
-            }}
+            transition={entranceTransition(0.6, 0.18)}
             className="mx-auto mt-6 max-w-2xl text-base leading-7 text-slate-300 sm:mt-7 sm:text-lg sm:leading-8"
           >
             CloudMind Solutions builds intelligent software,
@@ -198,15 +208,12 @@ export default function Hero() {
           {/* Calls to action */}
           <motion.div
             initial={
-              shouldReduceMotion
+              disableEntranceAnimation
                 ? false
                 : { opacity: 0, y: 16 }
             }
             animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: shouldReduceMotion ? 0 : 0.6,
-              delay: shouldReduceMotion ? 0 : 0.28,
-            }}
+            transition={entranceTransition(0.6, 0.28)}
             className="mt-8 flex w-full flex-col items-stretch justify-center gap-3 sm:mt-9 sm:w-auto sm:flex-row sm:items-center sm:gap-4"
           >
             <Link
@@ -224,7 +231,7 @@ export default function Hero() {
 
             <Link
               href="#services"
-              className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.04] px-6 py-3.5 text-sm font-semibold text-white backdrop-blur-xl transition-colors duration-200 hover:border-white/25 hover:bg-white/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050816] sm:w-auto"
+              className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.04] px-6 py-3.5 text-sm font-semibold text-white transition-colors duration-200 hover:border-white/25 hover:bg-white/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050816] sm:w-auto"
             >
               Explore Services
 
@@ -240,15 +247,12 @@ export default function Hero() {
           <motion.div
             aria-label="Our technology areas"
             initial={
-              shouldReduceMotion
+              disableEntranceAnimation
                 ? false
                 : { opacity: 0 }
             }
             animate={{ opacity: 1 }}
-            transition={{
-              duration: shouldReduceMotion ? 0 : 0.7,
-              delay: shouldReduceMotion ? 0 : 0.45,
-            }}
+            transition={entranceTransition(0.7, 0.45)}
             className="mt-10 flex flex-wrap items-center justify-center gap-2 sm:mt-12 sm:gap-3"
           >
             {technologyTags.map((technology) => (
