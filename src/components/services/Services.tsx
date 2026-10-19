@@ -16,6 +16,57 @@ import {
 const services = [
   {
     number: "01",
+    title: "Digital Transformation",
+    description:
+      "We are a leader in B2B digital transformation. We partner with organizations to drive meaningful, measurable, and sustainable change.",
+    icon: BrainCircuit,
+    tags: ["Digital Strategy", "Innovation", "Transformation"],
+  },
+  {
+    number: "02",
+    title: "Data Engineering",
+    description:
+      "We provide strategy development, implementation, and training services, with experience solving challenging data problems.",
+    icon: BarChart3,
+    tags: ["Data Strategy", "Engineering", "Analytics"],
+  },
+  {
+    number: "03",
+    title: "Salesforce Solutions",
+    description:
+      "As a Salesforce Partner, we deliver solutions for Salesforce requirements that go beyond standard platform capabilities.",
+    icon: Cloud,
+    tags: ["Salesforce", "CRM", "Integration"],
+  },
+  {
+    number: "04",
+    title: "IT Solutions and Staffing",
+    description:
+      "We provide comprehensive IT services and staffing solutions, supporting businesses with the expertise they need to grow.",
+    icon: Code2,
+    tags: ["IT Services", "Staffing", "Consulting"],
+  },
+  {
+    number: "05",
+    title: "Application Managed Services",
+    description:
+      "We provide software-as-a-service solutions to organizations seeking effective management of their IT resources and applications.",
+    icon: Workflow,
+    tags: ["SaaS", "Application Support", "IT Management"],
+  },
+  {
+    number: "06",
+    title: "Enterprise Resource Planning",
+    description:
+      "We help businesses build a complete resource planning framework, including systems for managing customer workflows.",
+    icon: Database,
+    tags: ["ERP", "Resource Planning", "Workflows"],
+  },
+];
+
+/*const services = [
+  {
+    number: "01",
     title: "AI & Machine Learning",
     description:
       "Build intelligent systems that automate decisions, uncover insights, and create smarter customer experiences.",
@@ -62,7 +113,7 @@ const services = [
     icon: Workflow,
     tags: ["APIs", "Automation", "Integration"],
   },
-];
+];*/
 
 export default function Services() {
   const shouldReduceMotion = useReducedMotion();
@@ -98,7 +149,7 @@ export default function Services() {
             >
               <span className="h-px w-8 bg-cyan-400" />
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400">
-                What we do
+                What we provide
               </span>
             </motion.div>
 
@@ -114,11 +165,11 @@ export default function Services() {
 
           <motion.p
             {...entrance(0.1)}
-            className="max-w-xl text-sm leading-7 text-slate-400 sm:text-base md:ml-auto"
+            className="max-w-xl text-sm leading-6 text-slate-400 sm:text-base md:ml-auto"
           >
-            From intelligent automation to scalable cloud platforms, we combine
-            engineering expertise and business thinking to create technology
-            that delivers measurable impact.
+            CloudMind Solutions is a provider of IT management solutions for companies and organizations around the world. 
+            Over the past decade, we've helped our clients reduce their costs, improve their performance, 
+            and achieve more with their IT infrastructure.
           </motion.p>
         </div>
 

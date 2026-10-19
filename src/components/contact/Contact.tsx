@@ -2,7 +2,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import {
   ArrowUpRight,
   Mail,
@@ -23,13 +22,34 @@ type ContactFormData = {
 };
 
 const contactServices = [
-  { value: "ai", label: "AI & Machine Learning" },
-  { value: "software", label: "Software Development" },
-  { value: "web", label: "Web & App Development" },
-  { value: "cloud", label: "Cloud Solutions" },
-  { value: "data", label: "Data & Analytics" },
-  { value: "automation", label: "Automation" },
-  { value: "other", label: "Something else" },
+  {
+    value: "digital-transformation",
+    label: "Digital Transformation",
+  },
+  {
+    value: "data-engineering",
+    label: "Data Engineering",
+  },
+  {
+    value: "salesforce-solutions",
+    label: "Salesforce Solutions",
+  },
+  {
+    value: "it-solutions-staffing",
+    label: "IT Solutions and Staffing",
+  },
+  {
+    value: "application-managed-services",
+    label: "Application Managed Services",
+  },
+  {
+    value: "enterprise-resource-planning",
+    label: "Enterprise Resource Planning",
+  },
+  {
+    value: "other",
+    label: "Something else",
+  },
 ];
 
 const contactItems = [
@@ -43,7 +63,7 @@ const contactItems = [
   {
     icon: Phone,
     label: "Phone",
-    value: "+91 XXXXX XXXXX",
+    value: "+91 9975420744",
     color: "cyan",
   },
   {
@@ -55,7 +75,7 @@ const contactItems = [
 ] as const;
 
 const inputClass =
-  "w-full min-w-0 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3.5 text-white outline-none transition-colors duration-200 placeholder:text-slate-600 focus:border-blue-400/60 focus:bg-white/[0.05]";
+  "w-full min-w-0 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3.5 text-white outline-none transition-colors duration-200 placeholder:text-slate-500 focus:border-blue-400/60 focus:bg-white/[0.05] focus-visible:ring-2 focus-visible:ring-blue-400/30";
 
 const errorClass = "mt-2 text-sm leading-5 text-red-400";
 
@@ -139,11 +159,12 @@ export default function Contact() {
       aria-labelledby="contact-heading"
       className="section-padding relative isolate overflow-hidden bg-[#050816]"
     >
-      {/* Lightweight ambient background */}
+      {/* Lightweight background decoration */}
       <div
         aria-hidden="true"
         className="contact-glow contact-glow-blue pointer-events-none absolute left-[-120px] top-1/3 h-56 w-56 rounded-full bg-blue-600/10 sm:h-80 sm:w-80"
       />
+
       <div
         aria-hidden="true"
         className="contact-glow contact-glow-purple pointer-events-none absolute bottom-0 right-[-120px] h-56 w-56 rounded-full bg-purple-600/10 sm:h-80 sm:w-80"
@@ -192,8 +213,9 @@ export default function Contact() {
             </h3>
 
             <p className="mt-5 leading-7 text-slate-400">
-              Whether you&apos;re building a new product, modernizing existing
-              systems, or exploring AI, we&apos;re ready to help.
+              Want to kickstart your digital transformation journey?
+              CloudMind Solutions can help amplify your digital efforts.
+              Contact us today!
             </p>
 
             <div className="mt-8 space-y-6 sm:mt-10">
@@ -245,9 +267,10 @@ export default function Contact() {
               <p className="text-sm font-medium text-white">
                 Looking for something specific?
               </p>
+
               <p className="mt-2 text-sm leading-6 text-slate-400">
-                We work across AI, software development, cloud, data,
-                automation, and digital products.
+                Explore our services and select the one that best matches
+                your business needs in the enquiry form.
               </p>
             </div>
           </motion.div>
@@ -282,7 +305,7 @@ export default function Contact() {
                 <button
                   type="button"
                   onClick={closeSuccess}
-                  className="mt-8 rounded-xl border border-white/10 px-5 py-3 text-sm text-white transition-colors duration-200 hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400"
+                  className="mt-8 min-h-11 rounded-xl border border-white/10 px-5 py-3 text-sm text-white transition-colors duration-200 hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400"
                 >
                   Send another message
                 </button>
@@ -293,6 +316,7 @@ export default function Contact() {
                 noValidate
                 className="space-y-6"
               >
+                {/* Name and email */}
                 <div className="grid gap-6 md:grid-cols-2">
                   <div className="min-w-0">
                     <label
@@ -301,6 +325,7 @@ export default function Contact() {
                     >
                       Your Name
                     </label>
+
                     <input
                       id="contact-name"
                       {...register("name", {
@@ -323,6 +348,7 @@ export default function Contact() {
                       }
                       className={inputClass}
                     />
+
                     {errors.name && (
                       <p id="contact-name-error" className={errorClass}>
                         {errors.name.message}
@@ -337,6 +363,7 @@ export default function Contact() {
                     >
                       Email Address
                     </label>
+
                     <input
                       id="contact-email"
                       {...register("email", {
@@ -356,6 +383,7 @@ export default function Contact() {
                       }
                       className={inputClass}
                     />
+
                     {errors.email && (
                       <p id="contact-email-error" className={errorClass}>
                         {errors.email.message}
@@ -364,6 +392,7 @@ export default function Contact() {
                   </div>
                 </div>
 
+                {/* Company and service */}
                 <div className="grid gap-6 md:grid-cols-2">
                   <div className="min-w-0">
                     <label
@@ -372,6 +401,7 @@ export default function Contact() {
                     >
                       Company
                     </label>
+
                     <input
                       id="contact-company"
                       {...register("company", {
@@ -391,6 +421,7 @@ export default function Contact() {
                       }
                       className={inputClass}
                     />
+
                     {errors.company && (
                       <p id="contact-company-error" className={errorClass}>
                         {errors.company.message}
@@ -405,6 +436,7 @@ export default function Contact() {
                     >
                       What do you need?
                     </label>
+
                     <select
                       id="contact-service"
                       {...register("service", {
@@ -416,15 +448,27 @@ export default function Contact() {
                           ? "contact-service-error"
                           : undefined
                       }
-                      className={`${inputClass} cursor-pointer bg-[#0b1124] [color-scheme:dark]`}
+                      className={`${inputClass} cursor-pointer bg-[#0b1124] text-white [color-scheme:dark]`}
                     >
-                      <option value="">Select a service</option>
+                      <option
+                        value=""
+                        disabled
+                        className="bg-[#0b1124] text-slate-400"
+                      >
+                        Select a service
+                      </option>
+
                       {contactServices.map((service) => (
-                        <option key={service.value} value={service.value}>
+                        <option
+                          key={service.value}
+                          value={service.value}
+                          className="bg-[#0b1124] text-white"
+                        >
                           {service.label}
                         </option>
                       ))}
                     </select>
+
                     {errors.service && (
                       <p
                         id="contact-service-error"
@@ -437,6 +481,7 @@ export default function Contact() {
                   </div>
                 </div>
 
+                {/* Project message */}
                 <div>
                   <label
                     htmlFor="contact-message"
@@ -444,6 +489,7 @@ export default function Contact() {
                   >
                     Tell us about your project
                   </label>
+
                   <textarea
                     id="contact-message"
                     {...register("message", {
@@ -462,10 +508,13 @@ export default function Contact() {
                     placeholder="Tell us about your idea, requirements, goals, or challenge..."
                     aria-invalid={!!errors.message}
                     aria-describedby={
-                      errors.message ? "contact-message-error" : undefined
+                      errors.message
+                        ? "contact-message-error"
+                        : undefined
                     }
                     className={`${inputClass} resize-y`}
                   />
+
                   {errors.message && (
                     <p id="contact-message-error" className={errorClass}>
                       {errors.message.message}
@@ -473,6 +522,7 @@ export default function Contact() {
                   )}
                 </div>
 
+                {/* Submission error */}
                 {submitError && (
                   <p
                     role="alert"
@@ -482,12 +532,14 @@ export default function Contact() {
                   </p>
                 )}
 
+                {/* Submit button */}
                 <button
                   type="submit"
                   disabled={isSubmitting}
                   className="group flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-white px-6 py-4 font-semibold text-slate-950 transition-colors duration-200 hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   {isSubmitting ? "Sending..." : "Send Message"}
+
                   <ArrowUpRight
                     size={18}
                     aria-hidden="true"

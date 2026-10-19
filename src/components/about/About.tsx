@@ -2,40 +2,55 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   ArrowUpRight,
   Blocks,
   Lightbulb,
   ShieldCheck,
   Zap,
+  Target,
+  Workflow,
+  Cloud,
+  Users,
 } from "lucide-react";
 import Link from "next/link";
 
 const strengths = [
   {
-    icon: Lightbulb,
-    title: "Innovation First",
+    number: "01",
+    icon: Target,
+    title: "Plan Your Strategy",
     description:
-      "We use modern technologies and intelligent approaches to solve real business problems.",
+      "Our team of experts can help you identify and assess your business needs, then develop a clear strategy to meet your goals.",
   },
   {
+    number: "02",
+    icon: Workflow,
+    title: "Choose the Right Digital Transformation Services",
+    description:
+      "We help you identify and implement cost-effective, scalable technology solutions aligned with your business needs.",
+  },
+  {
+    number: "03",
+    icon: Cloud,
+    title: "Bring the Power of Salesforce to Your Business",
+    description:
+      "Our Salesforce consulting and development services help streamline operations, strengthen customer relationships, and support business growth.",
+  },
+  {
+    number: "04",
     icon: Blocks,
-    title: "Built to Scale",
+    title: "Scale Your IT Infrastructure",
     description:
-      "Our solutions are designed with performance, flexibility, and long-term growth in mind.",
+      "Application managed services help you maintain reliable, scalable IT infrastructure with flexible remote or on-site support.",
   },
   {
-    icon: ShieldCheck,
-    title: "Security Focused",
+    number: "05",
+    icon: Users,
+    title: "Bring the Right People Onboard",
     description:
-      "Security and reliability are considered from architecture through deployment.",
-  },
-  {
-    icon: Zap,
-    title: "Business Impact",
-    description:
-      "We focus on technology that improves efficiency, customer experience, and measurable outcomes.",
+      "We help businesses find suitable talent, from sales professionals to engineers, to support their technology and business objectives.",
   },
 ];
 
@@ -47,116 +62,112 @@ const stats = [
 ];
 
 export default function About() {
+  const shouldReduceMotion = useReducedMotion();
+
+  const entrance = (delay = 0) => ({
+    initial: shouldReduceMotion ? false : { opacity: 0, y: 16 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, amount: 0.12 },
+    transition: shouldReduceMotion
+      ? { duration: 0 }
+      : { duration: 0.45, delay, ease: "easeOut" as const },
+  });
+
   return (
     <section
       id="about"
       className="section-padding relative overflow-hidden bg-[#050816]"
     >
       {/* Background decoration */}
-      <div className="pointer-events-none absolute right-[-10%] top-[10%] h-[300px] w-[300px] rounded-full bg-purple-600/5 blur-[60px] sm:h-[400px] sm:w-[400px] sm:blur-[90px] lg:h-[500px] lg:w-[500px] lg:blur-[140px]" />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute right-[-10%] top-[10%] h-[300px] w-[300px] rounded-full bg-purple-600/[0.05] sm:h-[400px] sm:w-[400px] lg:h-[500px] lg:w-[500px]"
+      />
 
       <div className="container-custom relative z-10">
-        {/* Main about */}
-        <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
+        {/* Main About section */}
+        <div className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
           {/* Left content */}
           <div>
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+              {...entrance()}
               className="mb-5 flex items-center gap-3"
             >
               <span className="h-px w-8 bg-cyan-400" />
-
               <span className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400">
                 About CloudMind
               </span>
             </motion.div>
 
             <motion.h2
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
+              {...entrance(0.05)}
               className="text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl"
             >
-              We turn complex ideas into
+              Focused on Delivering{" "}
               <span className="gradient-text">
-                {" "}intelligent solutions.
+                Value-Driven Solutions
               </span>
             </motion.h2>
 
             <motion.p
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.1 }}
+              {...entrance(0.1)}
               className="mt-6 max-w-xl text-base leading-7 text-slate-400"
             >
-              CloudMind Solutions is a technology company focused on helping
-              businesses use software, artificial intelligence, cloud
-              technologies, and data to build better products and operate
-              smarter.
+              CloudMind Solutions is a business technology partner focused on
+              helping organizations achieve important projects and milestones.
+              We take a tailored approach to help clients remain flexible,
+              innovative, and on the path to success.
             </motion.p>
 
             <motion.p
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.2 }}
+              {...entrance(0.15)}
               className="mt-4 max-w-xl text-base leading-7 text-slate-400"
             >
-              We believe great technology should be powerful behind the scenes
-              and simple for people to use. That's why we combine engineering
-              excellence with a deep understanding of business goals.
+              Our capabilities span digital transformation, Salesforce
+              solutions, data engineering, IT services and staffing, and
+              application management, helping businesses improve their
+              operations and pursue new opportunities.
             </motion.p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="mt-8"
-            >
+            <motion.div {...entrance(0.2)} className="mt-8">
               <Link
                 href="#contact"
-                className="group inline-flex items-center gap-2 text-sm font-semibold text-white"
+                className="group inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-white"
               >
-                Let's build something meaningful
-
+                Let&apos;s build something meaningful
                 <ArrowUpRight
                   size={17}
-                  className="text-cyan-400 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                  aria-hidden="true"
+                  className="text-cyan-400 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                 />
               </Link>
             </motion.div>
           </div>
 
           {/* Right visual */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="relative"
-          >
-            <div className="glass-card relative min-h-[430px] overflow-hidden rounded-[2rem] p-8">
+          <motion.div {...entrance(0.1)} className="relative min-w-0">
+            <div className="glass-card relative min-h-[390px] overflow-hidden rounded-[2rem] p-6 sm:min-h-[430px] sm:p-8">
               {/* Grid */}
-              <div className="grid-background absolute inset-0 opacity-40" />
-
-              {/* Central glow: smaller blur on mobile */}
-              <div className="pointer-events-none absolute left-1/2 top-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/10 blur-[40px] sm:h-40 sm:w-40 sm:blur-[60px] lg:h-48 lg:w-48 lg:blur-[80px]" />
-
-              {/* Static orbit rings: no continuous mobile animation */}
               <div
                 aria-hidden="true"
-                className="absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10"
+                className="grid-background pointer-events-none absolute inset-0 opacity-40"
+              />
+
+              {/* Central ambient color */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute left-1/2 top-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/[0.08] sm:h-40 sm:w-40"
+              />
+
+              {/* Static orbit rings */}
+              <div
+                aria-hidden="true"
+                className="absolute left-1/2 top-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 sm:h-64 sm:w-64"
               />
 
               <div
                 aria-hidden="true"
-                className="absolute left-1/2 top-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-400/10"
+                className="absolute left-1/2 top-1/2 h-36 w-36 -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-400/10 sm:h-40 sm:w-40"
               />
 
               {/* Center logo */}
@@ -170,48 +181,44 @@ export default function About() {
                 />
               </div>
 
-              {/* Floating nodes */}
-              <div className="absolute left-[18%] top-[22%] flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5">
+              {/* Surrounding capability icons */}
+              <div className="absolute left-[12%] top-[19%] flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-[#0b1124] sm:left-[18%] sm:top-[22%]">
                 <Lightbulb size={18} className="text-yellow-300" />
               </div>
 
-              <div className="absolute right-[17%] top-[24%] flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5">
+              <div className="absolute right-[12%] top-[21%] flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-[#0b1124] sm:right-[17%] sm:top-[24%]">
                 <Blocks size={18} className="text-purple-300" />
               </div>
 
-              <div className="absolute bottom-[22%] left-[20%] flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5">
+              <div className="absolute bottom-[22%] left-[14%] flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-[#0b1124] sm:left-[20%]">
                 <ShieldCheck size={18} className="text-emerald-300" />
               </div>
 
-              <div className="absolute bottom-[20%] right-[18%] flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/5">
+              <div className="absolute bottom-[20%] right-[13%] flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-[#0b1124] sm:right-[18%]">
                 <Zap size={18} className="text-cyan-300" />
               </div>
 
               {/* Status bar */}
-              <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between rounded-xl border border-white/5 bg-black/20 px-4 py-3">
-                <span className="text-xs text-slate-500">
-                  Engineering • Intelligence • Growth
+              <div className="absolute bottom-5 left-4 right-4 flex items-center justify-between gap-3 rounded-xl border border-white/[0.07] bg-[#080d1b] px-3 py-3 sm:bottom-6 sm:left-6 sm:right-6 sm:px-4">
+                <span className="text-[10px] text-slate-400 sm:text-xs">
+                  Engineering · Intelligence · Growth
                 </span>
-
-                <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-lg shadow-emerald-400/50" />
+                <span
+                  aria-hidden="true"
+                  className="h-2 w-2 shrink-0 rounded-full bg-emerald-400"
+                />
               </div>
             </div>
           </motion.div>
         </div>
 
-        {/* Stats */}
-        <div className="mt-20 grid grid-cols-2 divide-x divide-white/10 border-y border-white/10 md:grid-cols-4">
+        {/* Statistics */}
+        <div className="mt-16 grid grid-cols-2 divide-x divide-white/10 border-y border-white/10 sm:mt-20 md:grid-cols-4">
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{
-                duration: 0.5,
-                delay: index * 0.1,
-              }}
-              className="px-5 py-8 text-center md:py-10"
+              {...entrance(index * 0.05)}
+              className="px-4 py-7 text-center sm:px-5 sm:py-10"
             >
               <div className="text-3xl font-bold text-white sm:text-4xl">
                 {stat.value}
@@ -224,51 +231,75 @@ export default function About() {
           ))}
         </div>
 
-        {/* Strengths */}
-        <div className="mt-24">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-10"
-          >
+        {/* Why CloudMind */}
+        <div className="mt-20 sm:mt-24">
+          <motion.div {...entrance()} className="mb-5 flex items-center gap-3 ">
+            <span className="h-px w-8 bg-cyan-400" />
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-400">
               Why CloudMind
             </span>
-
-            <h3 className="mt-3 text-3xl font-bold text-white sm:text-4xl">
-              Built for what comes next.
-            </h3>
           </motion.div>
 
-          <div className="grid gap-px overflow-hidden rounded-3xl border border-white/10 bg-white/10 md:grid-cols-2 lg:grid-cols-4">
+          <motion.h2>
+            <h2 className="mt-3 text-3xl font-bold leading-tight text-white sm:text-4xl">
+              Your roadmap to{" "}
+              <span className="gradient-text">
+                digital transformation.
+              </span>
+            </h2>
+            </motion.h2>
+
+            <motion.p
+            {...entrance(0.1)}
+              className="mt-6 max-w-xl text-base leading-7 text-slate-400">
+              From planning your strategy to building the right team, we help
+              you identify practical opportunities and choose technology
+              solutions aligned with your business goals.
+            
+            </motion.p>
+          
+
+          {/* Numbered transformation process */}
+          <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {strengths.map((strength, index) => {
               const Icon = strength.icon;
 
               return (
-                <motion.div
-                  key={strength.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    duration: 0.5,
-                    delay: index * 0.1,
-                  }}
-                  className="bg-[#080d1d] p-7 transition-colors duration-300 hover:bg-[#0c1327]"
+                <motion.article
+                  key={strength.number}
+                  {...entrance(index * 0.05)}
+                  className="group relative min-w-0 overflow-hidden rounded-2xl border border-white/10 bg-[#080d1d] p-6 transition-colors duration-200 hover:border-cyan-400/25 hover:bg-[#0a1123] sm:p-7"
                 >
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.04]">
-                    <Icon size={20} className="text-cyan-300" />
+                  {/* Number and icon */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-cyan-400/20 bg-cyan-400/[0.06]">
+                      <Icon
+                        size={20}
+                        aria-hidden="true"
+                        className="text-cyan-300"
+                      />
+                    </div>
+
+                    <span className="text-sm font-semibold tracking-widest text-slate-600">
+                      {strength.number}
+                    </span>
                   </div>
 
-                  <h4 className="mt-6 text-base font-semibold text-white">
+                  {/* Step content */}
+                  <h4 className="mt-6 pr-2 text-lg font-semibold leading-snug text-white">
                     {strength.title}
                   </h4>
 
-                  <p className="mt-3 text-sm leading-6 text-slate-500">
+                  <p className="mt-3 text-sm leading-6 text-slate-400">
                     {strength.description}
                   </p>
-                </motion.div>
+
+                  {/* Decorative accent */}
+                  <div
+                    aria-hidden="true"
+                    className="mt-6 h-px w-10 bg-cyan-400/40 transition-[width] duration-200 group-hover:w-16"
+                  />
+                </motion.article>
               );
             })}
           </div>

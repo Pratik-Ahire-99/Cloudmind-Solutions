@@ -15,12 +15,12 @@ import { motion, useReducedMotion } from "framer-motion";
 const technologies = [
   {
     icon: BrainCircuit,
-    label: "AI & ML",
+    label: "Transformation",
     position: "left-[4%] top-[28%]",
   },
   {
     icon: Cloud,
-    label: "Cloud",
+    label: "Salesforce",
     position: "right-[4%] top-[27%]",
   },
   {
@@ -35,7 +35,7 @@ const technologies = [
   },
 ];
 
-const technologyTags = ["AI", "Cloud", "Data", "Software", "Automation"];
+const technologyTags = ["IT Services", "Salesforce", "Data Engineering", "Software","Resource Planning"];
 
 const entranceVariants = {
   hidden: { opacity: 0, y: 14 },
@@ -141,7 +141,7 @@ export default function Hero() {
             </span>
 
             <span className="text-xs font-medium leading-5 tracking-wide text-slate-300 sm:text-sm">
-              Building the future with intelligent technology
+              Innovate, Scale, and Expand with CloudMind Solutions.
             </span>
           </motion.div>
 
@@ -152,12 +152,12 @@ export default function Hero() {
             initial="hidden"
             animate="visible"
             transition={entranceTransition(0.08)}
-            className="mx-auto max-w-4xl text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl sm:leading-[1.08] md:text-7xl lg:text-8xl"
+            className="mx-auto max-w-4xl text-4xl font-bold leading-[1.1] tracking-tight text-white sm:text-5xl sm:leading-[1.08] md:text-7xl lg:text-7xl"
           >
-            Technology that
+            Custom Enterprise  
             <br className="hidden sm:block" />{" "}
             <span className="gradient-text">
-              moves business forward.
+             Solutions Built for Any Industry.
             </span>
           </motion.h1>
 
@@ -167,12 +167,11 @@ export default function Hero() {
             initial="hidden"
             animate="visible"
             transition={entranceTransition(0.16)}
-            className="mx-auto mt-6 max-w-2xl text-base leading-7 text-slate-300 sm:mt-7 sm:text-lg sm:leading-8"
+            className="mx-auto mt-6 max-w-2xl text-base leading-7 text-slate-300 sm:mt-7 sm:text-lg sm:leading-7"
           >
-            CloudMind Solutions builds intelligent software,
-            AI-powered solutions, cloud platforms, and modern
-            digital experiences that help businesses grow faster
-            and operate smarter.
+            CloudMind Solutions develop custom solutions for you no matter your industry or need.
+            Delivering Value through Cybernated Implementations, Acquire, Store & Analyze Data at Scale and
+            Drive, Deliver & Expand Seamlessly with the World's #1 CRM
           </motion.p>
 
           {/* Calls to action */}

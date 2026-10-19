@@ -35,12 +35,12 @@ export default function BrandLogo({
 
       {showName && (
         <span className="leading-none">
-          <span className="block whitespace-nowrap text-[12px]text-sm font-bold tracking-wide text-slate-400 ">
+          <span className="block whitespace-nowrap text-[12px]text-sm font-bold tracking-wide text-white ">
             Cloud<span className="text-[#38BDF8]">Mind</span>
           </span>
 
-          <span className="mt-1.5 block text-[7px] font-medium tracking-[0.25em] text-slate-400">
-            SOLUTIONS PVT LTD
+          <span className="mt-1.5 block text-[7px] font-medium tracking-[0.25em] text-white">
+            SOLUTIONS 
           </span>
         </span>
       )}

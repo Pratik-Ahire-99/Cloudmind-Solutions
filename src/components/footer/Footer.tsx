@@ -20,12 +20,12 @@ const exploreLinks = [
 ];
 
 const serviceLinks = [
-  "AI & Machine Learning",
-  "Software Development",
-  "Web & App Development",
-  "Cloud Solutions",
-  "Data & Analytics",
-  "Automation",
+  "Digital Transformation",
+  "Data Engineering",
+  "Salesforce Solutions",
+  "IT Solutions and Staffing",
+  "Application Managed Services",
+  "Enterprise Resource Planning",
 ];
 
 export default function Footer() {
@@ -64,6 +64,12 @@ export default function Footer() {
                   future together.
                 </span>
               </h2>
+
+              <p className="mt-5 max-w-xl text-sm leading-7 text-slate-400 sm:text-base">
+                From digital transformation to enterprise solutions,
+                let&apos;s find the right technology approach for your
+                business.
+              </p>
             </div>
 
             <Link
@@ -87,8 +93,9 @@ export default function Footer() {
             <BrandLogo logoSize={52} />
 
             <p className="mt-5 max-w-md text-sm leading-7 text-slate-400 sm:mt-6">
-              Intelligent technology solutions for businesses
-              ready to innovate, scale, and build what comes next.
+              Your technology partner for digital transformation,
+              data engineering, Salesforce solutions, and scalable
+              business technology.
             </p>
 
             <a
@@ -126,23 +133,25 @@ export default function Footer() {
             </ul>
           </nav>
 
-          {/* Services */}
-          <div>
+          {/* Updated services */}
+          <nav aria-label="Our services">
             <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
               Services
             </h3>
 
             <ul className="mt-5 space-y-3">
               {serviceLinks.map((service) => (
-                <li
-                  key={service}
-                  className="text-sm leading-6 text-slate-400"
-                >
-                  {service}
+                <li key={service}>
+                  <Link
+                    href="#services"
+                    className="inline-flex min-h-6 items-center text-sm leading-6 text-slate-400 transition-colors duration-200 hover:text-cyan-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-300"
+                  >
+                    {service}
+                  </Link>
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
           {/* Company information */}
           <div className="min-w-0">
@@ -151,9 +160,9 @@ export default function Footer() {
             </h3>
 
             <p className="mt-5 text-sm leading-7 text-slate-400">
-              Building intelligent software, modern digital
-              experiences, and scalable technology solutions
-              for growing businesses.
+              We help businesses plan their digital transformation,
+              connect systems, strengthen IT capabilities, and build
+              a foundation for sustainable growth.
             </p>
 
             <Link
@@ -174,7 +183,7 @@ export default function Footer() {
           </p>
 
           <div className="flex flex-wrap items-center gap-3">
-            {/* Replace # with your real profile URLs when available */}
+            {/* Replace with your official company profiles when available */}
             <a
               href="https://www.linkedin.com/"
               target="_blank"
