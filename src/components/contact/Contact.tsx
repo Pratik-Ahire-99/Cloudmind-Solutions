@@ -56,8 +56,8 @@ const contactItems = [
   {
     icon: Mail,
     label: "Email",
-    value: "hello@cloudmindsolutions.com",
-    href: "mailto:hello@cloudmindsolutions.com",
+    value: "hello@cloudmindsolutions.in",
+    href: "mailto:hello@cloudmindsolutions.in",
     color: "blue",
   },
   {

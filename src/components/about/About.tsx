@@ -240,13 +240,12 @@ export default function About() {
             </span>
           </motion.div>
 
-          <motion.h2>
-            <h2 className="mt-3 text-3xl font-bold leading-tight text-white sm:text-4xl">
+          <motion.h2
+             className="mt-3 text-4xl font-bold leading-tight text-white sm:text-5xl">
               Your roadmap to{" "}
               <span className="gradient-text">
                 digital transformation.
               </span>
-            </h2>
             </motion.h2>
 
             <motion.p
